@@ -1,3 +1,5 @@
+ import conditions from './conditions.js';
+ 
 const apiKey = 'e9a5d3b74bf84418b11193028231901'
 
 const header = document.querySelector('.header');
@@ -44,21 +46,34 @@ async function getWether(city) {
 
   if (data.error) {
     removeCard();
+
+   
     showError(data.error.message);
 
   } else {
     //отображаем полученные данные в карточке
     removeCard();
+    console.log(data.current.condition.code)
+    const info = conditions.find(function(obj){
+      if(obj.code===data.current.condition.code){
+      return true;
+      }
+    })
+    
     showCard(data.location.name, data.location.country, data.current.temp_c, data.current.condition.text);
     input.value = " "
   }
 
 }
 
+
+
 // 2. Слушаем отправку формы:
 
-form.addEventListener('click', async (evt) => {
+form.addEventListener('submit', async (evt) => {
+  console.log('hellow')
   evt.preventDefault()
+  
   city = input.value.trim();     //trim() обрезает пробелы и табы
   const data = await getWether(city);
 
